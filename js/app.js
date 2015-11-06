@@ -1,4 +1,4 @@
-var options = { enableGestures: true };
+    var options = { enableGestures: true };
     var flag = true;
     var clockwise = false;
     var controller = Leap.loop(options, function(frame){
@@ -6,37 +6,29 @@ var options = { enableGestures: true };
       frame.gestures.forEach(function(gesture){
           switch (gesture.type){
             case "circle":
-            /*
-                var circleProgress = gesture.progress;
-                var completeCircles = Math.floor(circleProgress);
-                console.log(completeCircles);
-                console.log(flag);
-                if (completeCircles % 3 == 0 && completeCircles != 0) {
-                  if (flag == true){
-                    console.log("fastForward");
-                    flag = false;
-                    fastForward();
-                  }
-                }
-                else{
-                  flag = true;
-                }
-            */
+
                 var circleProgress = gesture.progress;
                 var completeCircles = Math.floor(circleProgress);
 
                 var pointableID = gesture.pointableIds[0];
                 var direction = frame.pointable(pointableID).direction;
-                var dotProduct = Leap.vec3.dot(direction, gesture.normal);
+
+                /*hack* for getting direction failure*/
+                if (direction === undefined) direction = [0,0,0];
+                //console.log(pointableID);
+                //console.log(direction);
+                /*hack*/
+
+                var dotProduct = Leap.vec3.dot(direction, gesture.normal);//get direction
                 if (dotProduct  >  0) {
                   if (clockwise == false) circleProgress = 0;
                   clockwise = true;
-                  console.log("clockwise");
+                  //console.log("clockwise");
                 }
-                else{
+                else if (dotProduct < 0){
                   if (clockwise == true) circleProgress = 0;
                   clockwise = false;
-                  console.log("counterclockwise");
+                  //console.log("counterclockwise");
                 }
 
                 if (completeCircles % 3 == 0 && completeCircles != 0) {
@@ -56,9 +48,9 @@ var options = { enableGestures: true };
                     flag = true;
                 }
                 break;
-            //case "keyTap":
-              //  console.log("Key Tap Gesture");
-              //  break;
+            case "keyTap":
+                console.log("Key Tap Gesture");
+                break;
             
             case "screenTap":
                 console.log("Screen Tap Gesture");
