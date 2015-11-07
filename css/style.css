@@ -1,0 +1,10 @@
+body {
+	background-color:#000;
+	margin: 0;
+	overflow: hidden;
+	font-family: 'Montserrat', sans-serif;
+}
+
+.center {
+	text-align: center;
+}

@@ -2,9 +2,12 @@
 <html lang="zh">
 <head>
 	<title>Leap Video Controller</title>
+  <link rel="stylesheet" type="text/css" href="css/style.css" media="screen" />
 </head>
 <body>
-    <div>
+    <div class="center">
+      <br/>
+      <br/> 
       <button onclick="playPause()">Start</button> 
       <button onclick="makeBig()">Big</button>
       <button onclick="makeNormal()">Medium</button>
@@ -12,14 +15,15 @@
       <br/>
       <br/> 
     </div>
-    <div>
-    	<video id="video" src="video.mp4" controls="controls" height="640">
+    <div class="center">
+    	<video class="front" id="video" src="video.mp4" controls="controls" height="640"  align="center">
     		Your browser does not support HTML5 video.
     	</video>
     </div>
 
     <script src="js/leap-0.6.4.js"></script>
     <script src="js/leap-plugins-0.1.11.js"></script>
+    <script src="js/jquery.min.js"></script>
     <script src="js/app.js"></script> 
     
 </body>
