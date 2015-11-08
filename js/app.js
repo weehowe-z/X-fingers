@@ -2,12 +2,13 @@
     var flag = true;
     var clockwise = false;
     var controller = Leap.loop(options, function(frame){
-    if(frame.hands.length > 0) {
+    /*if(frame.hands.length > 0) {
         cardFlip(true, frame.hands[0].type, frame.hands[0].roll());
     }
     else {
         cardFlip(false, "", 0);       // if there are no hands detected, reset the rotations to 0
       }
+      */
     if(frame.valid && frame.gestures.length > 0){
       frame.gestures.forEach(function(gesture){
           switch (gesture.type){
@@ -55,7 +56,8 @@
             
             case "screenTap":
                 console.log("Screen Tap Gesture");
-                playPause();
+                //playPause();
+                playVideo();
                 break;
 
             case "swipe":
@@ -101,7 +103,7 @@
 
 
     var myVideo=document.getElementById("video");
-
+    /*
     function playPause()
     { 
     if (myVideo.paused) 
@@ -173,5 +175,7 @@
         transformCSS(".back", -180);
       }
     }
+
+    */
 
 

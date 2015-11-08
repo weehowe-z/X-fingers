@@ -14,17 +14,144 @@
       <button onclick="makeSmall()">Small</button>
       <br/>
       <br/> 
-    </div>
+    </div>  
+    <!--
     <div class="center">
     	<video class="front" id="video" src="video.mp4" controls="controls" height="640"  align="center">
     		Your browser does not support HTML5 video.
     	</video>
     </div>
+    -->
+<div class="player" id="youkuplayer" style="width:480px;height:400px"></div>
 
     <script src="js/leap-0.6.4.js"></script>
     <script src="js/leap-plugins-0.1.11.js"></script>
     <script src="js/jquery.min.js"></script>
+    <!--
     <script src="js/app.js"></script> 
+    -->
+    <script type="text/javascript" src="http://player.youku.com/jsapi">
+    player = new YKU.Player('youkuplayer',{
+    styleid: '0',
+    client_id: 'd55092f01596b95d',
+        vid: 'XMTM3NTM3MTU1Mg=='  
+        });
+
+        var player=document.getElementById("youkuplayer");
+
+    function playVideo(){
+    player.playVideo();
+    }
+    function pauseVideo(){
+    player.pauseVideo();
+    }
+
+        var options = { enableGestures: true };
+    var flag = true;
+    var clockwise = false;
+    var controller = Leap.loop(options, function(frame){
+    /*if(frame.hands.length > 0) {
+        cardFlip(true, frame.hands[0].type, frame.hands[0].roll());
+    }
+    else {
+        cardFlip(false, "", 0);       // if there are no hands detected, reset the rotations to 0
+      }
+      */
+    if(frame.valid && frame.gestures.length > 0){
+      frame.gestures.forEach(function(gesture){
+          switch (gesture.type){
+            case "circle":
+
+                var circleProgress = gesture.progress;
+                var completeCircles = Math.floor(circleProgress);
+
+                var pointableID = gesture.pointableIds[0];
+                var direction = frame.pointable(pointableID).direction;
+
+                /*hack* for getting direction failure*/
+                if (direction === undefined) direction = [0,0,0];
+                /*hack*/
+
+                var dotProduct = Leap.vec3.dot(direction, gesture.normal);//get direction
+                if (dotProduct  >  0) {
+                  if (clockwise == false) circleProgress = 0;
+                  clockwise = true;
+                  //console.log("clockwise");
+                }
+                else if (dotProduct < 0){
+                  if (clockwise == true) circleProgress = 0;
+                  clockwise = false;
+                  //console.log("counterclockwise");
+                }
+
+                if (completeCircles % 3 == 0 && completeCircles != 0) {
+                  if (flag == true){
+                    if (clockwise == true){
+                      console.log("fastForward");
+                      fastForward();
+                    }
+                    else {
+                      console.log("fastBackward");
+                      fastBackward();                      
+                    }
+                    flag = false;
+                  }
+                }
+                else{
+                    flag = true;
+                }
+                break;
+            
+            case "screenTap":
+                console.log("Screen Tap Gesture");
+                //playPause();
+                playVideo();
+                break;
+
+            case "swipe":
+                //Classify swipe as either horizontal or vertical
+                var isHorizontal = Math.abs(gesture.direction[0]) > Math.abs(gesture.direction[1]);
+                var duration = gesture.duration;
+                var swipeDirection;
+                //Classify as right-left or up-down
+                if(isHorizontal){
+                    if(gesture.direction[0] > 0){
+                        if (duration > 5000){
+                          swipeDirection = "right";
+                          makeNormal();
+                        }
+                    } else {
+                        if (duration > 5000){
+                          swipeDirection = "left";
+                          makeSmall();
+                        }
+                    }
+                } else { //vertical
+                    if(gesture.direction[1] > 0){
+                        //console.log(duration);
+                        if (duration > 5000){
+                          swipeDirection = "up";
+                          unmute();
+                        }
+                    } else {
+                        if (duration > 5000){
+                          swipeDirection = "down";
+                          mute();
+                        }
+                    }                  
+                }
+                console.log(swipeDirection);
+                break;
+            }
+          });
+      }
+    });
+
+
+
+
+    var myVideo=document.getElementById("video");
+    </script>
     
 </body>
 </html>
